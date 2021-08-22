@@ -16,16 +16,36 @@ io.on('connection', function(socket){
     });
 
     socket.on('msgParaServidor', function(data){
+        
         socket.emit(
             'msgParaCliente',
             {apelido: data.apelido, mensagem: data.mensagem}
         );
-    });
 
-    socket.on('msgParaServidor', function(data){
         socket.broadcast.emit(
             'msgParaCliente',
             {apelido: data.apelido, mensagem: data.mensagem}
         );
+
+        if(data.apelido_atualizado == 0){
+            socket.emit(
+                'participantesParaCliente',
+                {apelido: data.apelido, mensagem: data.mensagem}
+            );
+    
+            socket.broadcast.emit(
+                'participantesParaCliente',
+                {apelido: data.apelido, mensagem: data.mensagem}
+            );   
+        }
     });
+
+    /*socket.on('msgParaServidor', function(data){
+        socket.broadcast.emit(
+            'msgParaCliente',
+            {apelido: data.apelido, mensagem: data.mensagem}
+        );
+    });*/
+
+    
 });
